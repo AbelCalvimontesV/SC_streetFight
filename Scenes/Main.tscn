@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://bgck6g82mebp3"]
+
+[ext_resource type="Script" uid="uid://vlmp15y4lmsm" path="res://scripts/managers/fight_manager.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://dsy4e000rosr8" path="res://Scenes/Ring.tscn" id="2_rgh2o"]
+
+[node name="Main" type="Node2D" unique_id=182773683]
+script = ExtResource("1")
+
+[node name="Ring" parent="." unique_id=1164042054 instance=ExtResource("2_rgh2o")]
+position = Vector2(512, 512)
