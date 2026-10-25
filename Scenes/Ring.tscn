@@ -36,7 +36,7 @@ shape = SubResource("RectangleShape2D_71x6v")
 position = Vector2(600, 0)
 shape = SubResource("RectangleShape2D_qipgn")
 
-[node name="FondoAni,ado" type="VideoStreamPlayer" parent="." unique_id=1743374350]
+[node name="FondoAnimado" type="VideoStreamPlayer" parent="." unique_id=1743374350]
 z_index = -10
 offset_left = -792.0
 offset_top = -336.0

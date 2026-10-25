@@ -1,0 +1,17 @@
+res://Scenes/Ring.tscn
+res://assets/chroma_key.gdshader
+res://scripts/managers/fight_manager.gd
+res://scripts/managers/sound_manager.gd
+res://scripts/combat/BoxerBase.gd
+res://scripts/MainMenu.gd
+res://scripts/ControlsMenu.gd
+res://Scenes/characters/Maju.tscn
+res://Scenes/characters/Vinchita.tscn
+res://Scenes/characters/MarioCronenbold.tscn
+res://scripts/AI/boxing_ai.gd
+res://Scenes/enemies/ChichoMedina.tscn
+res://Scenes/enemies/BasicOpponent.tscn
+res://Scenes/Main.tscn
+res://Scenes/characters/MamenSavedra.tscn
+res://Scenes/BoxerTest.tscn
+res://Scenes/HitEffect.tscn

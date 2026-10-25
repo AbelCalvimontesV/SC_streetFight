@@ -117,6 +117,31 @@ const ANIM_JUMP_KO: StringName = &"jump_ko"
 @onready var hitbox_kick: Area2D = $HitboxKick
 @onready var hitbox_special: Area2D = $HitboxSpecial
 
+
+# ============================================================
+# SONIDOS
+# ============================================================
+
+func _play_combat_sound(sound_name: StringName) -> void:
+	if not is_inside_tree():
+		return
+
+	if not is_instance_valid(SoundManager):
+		return
+
+	match sound_name:
+		&"jab":
+			SoundManager.play_jab()
+		&"heavy_attack":
+			SoundManager.play_heavy_attack()
+		&"kick":
+			SoundManager.play_kick()
+		&"hit":
+			SoundManager.play_hit()
+		&"special":
+			SoundManager.play_special()
+
+
 # ============================================================
 # ESTADO
 # ============================================================
@@ -145,6 +170,8 @@ var knockback_velocity: Vector2 = Vector2.ZERO
 var active_hitbox: Area2D = null
 var hit_targets: Dictionary = {}
 var attack_data: Dictionary = {}
+# Curación exclusiva del especial de Vinchita.
+const VINCHITA_HEAL_AMOUNT: float = 25.0
 
 var _attack_key_was_pressed: bool = false
 var _heavy_key_was_pressed: bool = false
@@ -678,16 +705,42 @@ func _start_attack(anim: StringName) -> void:
 
 	current_animation = &""
 	_play_animation(anim)
+
+	# Reproducir el sonido correspondiente al ataque.
+	match anim:
+		ANIM_JAB, ANIM_CROUCH_JAB, ANIM_JUMP_JAB:
+			_play_combat_sound(&"jab")
+
+		ANIM_HEAVY_ATTACK:
+			_play_combat_sound(&"heavy_attack")
+
+		ANIM_KICK:
+			_play_combat_sound(&"kick")
+
+		ANIM_SPECIAL:
+			_play_combat_sound(&"special")
+
 	attack_started.emit(self, anim)
 
+	# Especial de Vinchita: recupera 25 puntos de vida.
+	# No activa el hitbox ni causa daño al rival.
+	if anim == ANIM_SPECIAL and boxer_name.to_lower().contains("vinchita"):
+		health = minf(max_health, health + VINCHITA_HEAL_AMOUNT)
+		stats_changed.emit(self)
+
+		_run_healing_special(
+			this_attack_id,
+			animation_duration
+		)
+		return
+
+	# Los demás personajes conservan su especial ofensivo.
 	_run_attack(
 		this_attack_id,
 		selected_hitbox,
 		active_time,
 		animation_duration
 	)
-
-
 func try_start_attack(animation_name: StringName) -> bool:
 	if is_out or is_attacking or hit_stun_time > 0.0:
 		return false
@@ -741,7 +794,26 @@ func _run_attack(
 	attack_finished.emit(self, finished_attack)
 	_play_animation(ANIM_IDLE)
 
+func _run_healing_special(
+	this_attack_id: int,
+	animation_duration: float
+) -> void:
+	# Vinchita no necesita activar su hitbox para curarse.
+	_disable_all_hitboxes()
 
+	await get_tree().create_timer(animation_duration).timeout
+
+	if not is_inside_tree() or this_attack_id != attack_id:
+		return
+
+	is_attacking = false
+
+	var finished_attack: StringName = current_attack
+	current_attack = &""
+	current_animation = &""
+
+	attack_finished.emit(self, finished_attack)
+	_play_animation(ANIM_IDLE)
 func _disable_all_hitboxes() -> void:
 	for hitbox in _get_all_hitboxes():
 		if is_instance_valid(hitbox):
@@ -966,37 +1038,68 @@ func _on_animated_sprite_animation_finished() -> void:
 	animated_sprite.pause()
 
 func _control_presionado(accion: String) -> bool:
-	# Leer el teclado cuando este personaje lo tenga permitido.
-	if usar_teclado and Input.is_action_pressed(accion):
+	# Acciones de teclado del jugador 2.
+	var acciones_jugador_2: Dictionary = {
+		"move_left": "p2_move_left",
+		"move_right": "p2_move_right",
+		"crouch": "p2_crouch",
+		"jump": "p2_jump",
+		"jab": "p2_jab",
+		"heavy_attack": "p2_heavy_attack",
+		"kick": "p2_kick",
+		"special": "p2_special",
+		"block": "p2_block"
+	}
+
+	# Determinar si este boxeador es el jugador 2.
+	var es_jugador_2: bool = (
+		is_player and boxer_name.begins_with("J2 - ")
+	)
+
+	var accion_teclado: String = accion
+
+	if es_jugador_2:
+		accion_teclado = str(
+			acciones_jugador_2.get(accion, accion)
+		)
+
+	# Leer el teclado si está habilitado.
+	if usar_teclado and Input.is_action_pressed(accion_teclado):
 		return true
 
-	# No leer mandos que no están asignados o conectados.
+	# Verificar si tiene un mando asignado.
 	if mando_id < 0:
 		return false
 
+	# Verificar que el mando siga conectado.
 	if not Input.get_connected_joypads().has(mando_id):
 		return false
 
-	# Botones y cruceta.
+	# Leer los botones del mando.
 	if BOTONES_MANDO.has(accion):
 		var boton: int = int(BOTONES_MANDO[accion])
 
 		if Input.is_joy_button_pressed(mando_id, boton):
 			return true
 
-	# Stick izquierdo.
+	# Leer el stick izquierdo.
 	var eje_x: float = Input.get_joy_axis(
-		mando_id, JOY_AXIS_LEFT_X
+		mando_id,
+		JOY_AXIS_LEFT_X
 	)
+
 	var eje_y: float = Input.get_joy_axis(
-		mando_id, JOY_AXIS_LEFT_Y
+		mando_id,
+		JOY_AXIS_LEFT_Y
 	)
 
 	match accion:
 		"move_left":
 			return eje_x < -ZONA_MUERTA_MANDO
+
 		"move_right":
 			return eje_x > ZONA_MUERTA_MANDO
+
 		"crouch":
 			return eje_y > ZONA_MUERTA_MANDO
 

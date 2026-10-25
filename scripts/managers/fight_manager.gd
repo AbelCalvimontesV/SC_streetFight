@@ -12,8 +12,60 @@ const ENEMY_SCENE := "res://Scenes/enemies/ChichoMedina.tscn"
 const MAMEN_SCENE := "res://Scenes/characters/MamenSavedra.tscn"
 const CHICHO_SCENE := "res://Scenes/enemies/ChichoMedina.tscn"
 
+const MARIO_SCENE := "res://Scenes/characters/MarioCronenbold.tscn"
+const VINCHITA_SCENE := "res://Scenes/characters/Vinchita.tscn"
+const MAJU_SCENE := "res://Scenes/characters/Maju.tscn"
+
+const AVAILABLE_CHARACTERS: Array[Dictionary] = [
+	{
+		"name": "Mamen Savedra",
+		"id": "MamenSavedra",
+		"scene": MAMEN_SCENE
+	},
+	{
+		"name": "Chicho Medina",
+		"id": "ChichoMedina",
+		"scene": CHICHO_SCENE
+	},
+	{
+		"name": "Mario Cronenbold",
+		"id": "MarioCronenbold",
+		"scene": MARIO_SCENE
+	},
+	{
+		"name": "Vinchita",
+		"id": "Vinchita",
+		"scene": VINCHITA_SCENE
+	},
+	{
+		"name": "Maju",
+		"id": "Maju",
+		"scene": MAJU_SCENE
+	}
+]
+
+const CAMPAIGN_SCENES: Array[String] = [
+	VINCHITA_SCENE,
+	MAMEN_SCENE,
+	MARIO_SCENE,
+	MAJU_SCENE,
+	CHICHO_SCENE
+]
+
+const CAMPAIGN_NAMES: Array[String] = [
+	"Vinchita",
+	"Mamen Savedra",
+	"Mario Cronenbold",
+	"Maju",
+	"Chicho Medina"
+]
+
 var selected_character_scene: String = MAMEN_SCENE
 var selected_character_name: String = "MamenSavedra"
+var selected_player2_scene: String = CHICHO_SCENE
+var selected_player2_name: String = "ChichoMedina"
+
+var selecting_player_number: int = 1
 
 # 0 = Mamen Savedra, 1 = Chicho Medina.
 var campaign_fight_index: int = 0
@@ -56,6 +108,7 @@ var enemy: BoxerBase
 var fight_ui: CanvasLayer
 var hud: Control
 var menu_overlay: Control
+var main_menu: Control
 
 var player_health_bar: ProgressBar
 var player_stamina_bar: ProgressBar
@@ -303,120 +356,88 @@ func _setup_ui() -> void:
 # --------------------------------------------------
 
 
+
+
+
+
+
 func show_main_menu() -> void:
 	ring.process_mode = Node.PROCESS_MODE_INHERIT
 	_remove_boxers()
+
 	fight_started = false
 	fight_finished = false
 	waiting_next_round = false
 	break_timer = 0.0
 	announcement_id += 1
 
+	multijugador_local = false
+	solo_mando = false
+
 	_clear_ui()
 
-	var background := ColorRect.new()
-	background.name = "MenuBackground"
-	background.color = Color(0.035, 0.045, 0.065, 0.97)
-	background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	fight_ui.add_child(background)
+	main_menu = Control.new()
+	main_menu.set_script(load("res://scripts/MainMenu.gd"))
+	fight_ui.add_child(main_menu)
 
-	var top_line := ColorRect.new()
-	top_line.color = Color("#a83240")
-	top_line.size = Vector2(960, 5)
-	background.add_child(top_line)
-
-	menu_overlay = Control.new()
-	menu_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	fight_ui.add_child(menu_overlay)
-
-	var panel := PanelContainer.new()
-	panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
-	panel.offset_left = -260
-	panel.offset_right = 260
-	panel.offset_top = -260
-	panel.offset_bottom = 260
-	panel.add_theme_stylebox_override(
-		"panel", _panel_style(PANEL_COLOR, Color("#a83b48"), 2, 10)
+	main_menu.single_player_selected.connect(
+		_on_single_player_selected
 	)
-	menu_overlay.add_child(panel)
 
-	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 13)
-	panel.add_child(layout)
-
-	var title := _make_label(
-		layout, "TitleLabel", "PIXEL BOXING CLUB",
-		Vector2.ZERO, Vector2(480, 48), 28, GOLD_COLOR
+	main_menu.local_multiplayer_selected.connect(
+		_on_local_multiplayer_selected
 	)
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 
-	var subtitle := _make_label(
-		layout, "SubtitleLabel", "CHOOSE YOUR FIGHTER",
-		Vector2.ZERO, Vector2(480, 25), 12, MUTED_COLOR
+	main_menu.load_saved_game_selected.connect(
+		show_saved_match
 	)
-	subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 
-	var start_button := Button.new()
-	start_button.name = "StartButton"
-	start_button.text = "UN JUGADOR - TECLADO / MANDO"
-	start_button.custom_minimum_size = Vector2(0, 42)
-	_style_button(start_button, Color("#a83240"), Color("#f06b76"))
-	start_button.pressed.connect(start_fight)
-	layout.add_child(start_button)
-	start_button.grab_focus()
-
-	var controller_button := Button.new()
-	controller_button.text = "UN JUGADOR - SOLO MANDO"
-	controller_button.custom_minimum_size = Vector2(0, 38)
-	_style_button(controller_button, Color("#283b42"), Color("#4b9d92"))
-	controller_button.pressed.connect(start_controller_fight)
-	layout.add_child(controller_button)
-
-	var local_button := Button.new()
-	local_button.text = "DOS JUGADORES - TECLADO + MANDO"
-	local_button.custom_minimum_size = Vector2(0, 38)
-	_style_button(local_button, Color("#283b42"), Color("#4b9d92"))
-	local_button.pressed.connect(start_local_multiplayer)
-	layout.add_child(local_button)
-
-
-	var select_button := Button.new()
-	select_button.name = "SelectCharacterButton"
-	select_button.text = "SELECT YOUR CHARACTER"
-	select_button.custom_minimum_size = Vector2(0, 38)
-	_style_button(
-		select_button,
-		Color("#283b42"),
-		Color("#4b9d92")
+	main_menu.career_record_selected.connect(
+		show_progress
 	)
-	select_button.pressed.connect(show_character_select)
-	layout.add_child(select_button)
 
-	continue_button = Button.new()
-	continue_button.text = "Load Saved Game"
-	continue_button.custom_minimum_size = Vector2(0, 38)
-	_style_button(continue_button, Color("#283b42"), Color("#4b9d92"))
-	continue_button.pressed.connect(show_saved_match)
-	layout.add_child(continue_button)
+	main_menu.controls_selected.connect(
+		show_controls_menu
+	)
 
-	var progress_button := Button.new()
-	progress_button.text = "VIEW CAREER RECORD"
-	progress_button.custom_minimum_size = Vector2(0, 38)
-	_style_button(progress_button, Color("#252c38"), Color("#5c6579"))
-	progress_button.pressed.connect(show_progress)
-	layout.add_child(progress_button)
+	main_menu.exit_selected.connect(
+		_exit_game
+	)
 
-	var exit_button := Button.new()
-	exit_button.text = "EXIT"
-	exit_button.custom_minimum_size = Vector2(0, 35)
-	_style_button(exit_button, Color("#252c38"), Color("#5c6579"))
-	exit_button.pressed.connect(_exit_game)
-	layout.add_child(exit_button)
 
-	continue_button.disabled = false
+func show_controls_menu() -> void:
+	_clear_ui()
+
+	var controls_menu := Control.new()
+	controls_menu.set_script(
+		load("res://scripts/ControlsMenu.gd")
+	)
+
+	fight_ui.add_child(controls_menu)
+
+	controls_menu.back_to_menu_selected.connect(
+		show_main_menu
+	)
+
+
+
+func _on_single_player_selected() -> void:
+	multijugador_local = false
+	solo_mando = false
+	show_character_select()
+
+
+func _on_local_multiplayer_selected() -> void:
+	multijugador_local = true
+	solo_mando = false
+	show_character_select()
+
+
 # --------------------------------------------------
 # CHARACTER SELECT
 # --------------------------------------------------
+
+
 
 func show_character_select() -> void:
 	fight_started = false
@@ -431,87 +452,111 @@ func show_character_select() -> void:
 	background.name = "CharacterSelectBackground"
 	background.color = Color(0.035, 0.045, 0.065, 0.97)
 	background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	background.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	fight_ui.add_child(background)
-
-	var top_line := ColorRect.new()
-	top_line.color = Color("#a83240")
-	top_line.size = Vector2(960, 5)
-	background.add_child(top_line)
 
 	var screen := Control.new()
 	screen.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	fight_ui.add_child(screen)
 
+	var heading := "SELECT YOUR FIGHTER"
+
+	if multijugador_local:
+		heading = "PLAYER %d — SELECT YOUR FIGHTER" % selecting_player_number
+
 	var title := _make_label(
 		screen,
 		"CharacterSelectTitle",
-		"SELECT YOUR BOXER",
-		Vector2(180, 65),
-		Vector2(600, 50),
-		30,
+		heading,
+		Vector2(100, 35),
+		Vector2(760, 50),
+		27,
 		GOLD_COLOR
 	)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 
-	var subtitle := _make_label(
-		screen,
-		"CharacterSelectSubtitle",
-		"CHOOSE YOUR FIGHTER",
-		Vector2(180, 115),
-		Vector2(600, 25),
-		12,
-		MUTED_COLOR
-	)
-	subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	var current_scene := selected_character_scene
+	var current_name := selected_character_name
 
-	var mamen_button := Button.new()
-	mamen_button.name = "MamenSelectButton"
-	mamen_button.text = "MAMEN SAVEDRA"
-	mamen_button.position = Vector2(220, 190)
-	mamen_button.size = Vector2(220, 90)
-	_style_button(
-		mamen_button,
-		Color("#283b42"),
-		Color("#4b9d92")
-	)
-	mamen_button.pressed.connect(
-		func() -> void:
-			_select_character(MAMEN_SCENE, "MamenSavedra")
-	)
-	screen.add_child(mamen_button)
+	if multijugador_local and selecting_player_number == 2:
+		current_scene = selected_player2_scene
+		current_name = selected_player2_name
 
-	var chicho_button := Button.new()
-	chicho_button.name = "ChichoSelectButton"
-	chicho_button.text = "CHICHO MEDINA"
-	chicho_button.position = Vector2(520, 190)
-	chicho_button.size = Vector2(220, 90)
-	_style_button(
-		chicho_button,
-		Color("#47252d"),
-		Color("#f06b76")
-	)
-	chicho_button.pressed.connect(
-		func() -> void:
-			_select_character(CHICHO_SCENE, "ChichoMedina")
-	)
-	screen.add_child(chicho_button)
+	var columns := 3
+	var button_size := Vector2(220, 90)
+	var horizontal_gap := 30.0
+	var vertical_gap := 20.0
+	var total_width := columns * button_size.x + (columns - 1) * horizontal_gap
+	var start_x := (960.0 - total_width) / 2.0
+	var start_y := 115.0
+
+	for i in range(AVAILABLE_CHARACTERS.size()):
+		var character: Dictionary = AVAILABLE_CHARACTERS[i]
+		var scene_path: String = character["scene"]
+		var character_name: String = character["id"]
+		var display_name: String = character["name"]
+
+		var character_button := Button.new()
+		character_button.name = character_name + "SelectButton"
+		character_button.text = display_name.to_upper()
+		character_button.size = button_size
+
+		var column := i % columns
+		var row := int(i / columns)
+
+		character_button.position = Vector2(
+			start_x + column * (button_size.x + horizontal_gap),
+			start_y + row * (button_size.y + vertical_gap)
+		)
+
+		if scene_path == current_scene:
+			_style_button(
+				character_button,
+				Color("#a83240"),
+				Color("#f4cf72")
+			)
+		else:
+			_style_button(
+				character_button,
+				Color("#283b42"),
+				Color("#4b9d92")
+			)
+
+		character_button.pressed.connect(
+			_select_character.bind(scene_path, character_name)
+		)
+
+		screen.add_child(character_button)
 
 	var selected_label := _make_label(
 		screen,
 		"SelectedCharacterLabel",
-		"CURRENT: " + selected_character_name.to_upper(),
-		Vector2(180, 320),
+		"SELECTED: " + current_name.to_upper(),
+		Vector2(180, 335),
 		Vector2(600, 30),
 		16,
 		GOLD_COLOR
 	)
 	selected_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 
+	var confirm_button := Button.new()
+	confirm_button.name = "ConfirmButton"
+	confirm_button.text = "CONFIRM"
+	confirm_button.position = Vector2(370, 380)
+	confirm_button.size = Vector2(220, 45)
+	_style_button(
+		confirm_button,
+		Color("#a83240"),
+		Color("#f06b76")
+	)
+	confirm_button.pressed.connect(_confirm_character_selection)
+	screen.add_child(confirm_button)
+
 	var back_button := Button.new()
 	back_button.name = "BackButton"
 	back_button.text = "BACK TO MENU"
-	back_button.position = Vector2(370, 390)
-	back_button.size = Vector2(220, 42)
+	back_button.position = Vector2(370, 440)
+	back_button.size = Vector2(220, 38)
 	_style_button(
 		back_button,
 		Color("#252c38"),
@@ -521,14 +566,32 @@ func show_character_select() -> void:
 	screen.add_child(back_button)
 
 
+
 func _select_character(scene_path: String, character_name: String) -> void:
 	if not ResourceLoader.exists(scene_path):
 		push_error("Character scene not found: " + scene_path)
 		return
 
-	selected_character_scene = scene_path
-	selected_character_name = character_name
+	if multijugador_local and selecting_player_number == 2:
+		selected_player2_scene = scene_path
+		selected_player2_name = character_name
+	else:
+		selected_character_scene = scene_path
+		selected_character_name = character_name
+
 	show_character_select()
+
+
+func _confirm_character_selection() -> void:
+	if multijugador_local:
+		if selecting_player_number == 1:
+			selecting_player_number = 2
+			show_character_select()
+		else:
+			_start_new_match()
+	else:
+		_start_new_match()
+
 
 
 # --------------------------------------------------
@@ -667,7 +730,6 @@ func _setup_fight_ui() -> void:
 	result_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	result_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 
-	_make_controls_panel()
 	_update_stats_ui()
 	_update_round_label()
 	_update_timer_label()
@@ -785,10 +847,9 @@ func start_local_multiplayer() -> void:
 
 
 
+
 func _start_new_match() -> void:
-	if (multijugador_local or solo_mando) and Input.get_connected_joypads().is_empty():
-		_show_message("CONECTA UN MANDO Y VUELVE A INICIAR")
-		return
+	# Permitir iniciar la partida con teclado, mando o ambos.
 	ring.process_mode = Node.PROCESS_MODE_INHERIT
 	announcement_id += 1
 	campaign_fight_index = 0
@@ -804,10 +865,14 @@ func _start_new_match() -> void:
 	enemy_round_wins = 0
 	round_timer = ROUND_DURATION
 
+	# Elegir el escenario para esta pelea.
+	_elegir_escenario_aleatorio()
+
 	if not _spawn_boxers():
 		return
 
 	_start_round()
+
 
 
 
@@ -816,13 +881,27 @@ func _spawn_boxers() -> bool:
 	var enemy_scene_path: String
 	var enemy_name: String
 
-	if campaign_fight_index == 0:
-		enemy_scene_path = MAMEN_SCENE
-		enemy_name = "MamenSavedra"
+	# Elegir al rival según el modo de juego.
+	if multijugador_local:
+		enemy_scene_path = selected_player2_scene
+		enemy_name = selected_player2_name
 	else:
-		enemy_scene_path = CHICHO_SCENE
-		enemy_name = "ChichoMedina"
+		# Campaña:
+		# 0 = Vinchita
+		# 1 = Mamen Savedra
+		# 2 = Mario Cronenbold
+		# 3 = Maju
+		# 4 = Chicho Medina
+		campaign_fight_index = clampi(
+			campaign_fight_index,
+			0,
+			CAMPAIGN_SCENES.size() - 1
+		)
 
+		enemy_scene_path = CAMPAIGN_SCENES[campaign_fight_index]
+		enemy_name = CAMPAIGN_NAMES[campaign_fight_index]
+
+	# Comprobar que las escenas existan.
 	if not ResourceLoader.exists(player_scene_path):
 		push_error("Player scene not found: " + player_scene_path)
 		_show_message("ERROR: PLAYER SCENE NOT FOUND")
@@ -833,6 +912,7 @@ func _spawn_boxers() -> bool:
 		_show_message("ERROR: ENEMY SCENE NOT FOUND")
 		return false
 
+	# Cargar las escenas.
 	var player_packed := load(player_scene_path) as PackedScene
 	var enemy_packed := load(enemy_scene_path) as PackedScene
 
@@ -841,14 +921,17 @@ func _spawn_boxers() -> bool:
 		_show_message("ERROR: COULD NOT LOAD BOXER SCENES")
 		return false
 
+	# Limpiar los boxeadores anteriores.
 	_remove_boxers()
 
+	# Crear los nuevos boxeadores.
 	var new_player := player_packed.instantiate() as BoxerBase
 	var new_enemy := enemy_packed.instantiate() as BoxerBase
 
 	if new_player == null or new_enemy == null:
 		if is_instance_valid(new_player):
 			new_player.free()
+
 		if is_instance_valid(new_enemy):
 			new_enemy.free()
 
@@ -862,33 +945,70 @@ func _spawn_boxers() -> bool:
 	player.name = "Player"
 	enemy.name = "Enemy"
 
-	# Configurar antes de agregar al árbol.
-	player.boxer_name = selected_character_name
-	player.is_player = true
-
-	enemy.boxer_name = enemy_name
-	enemy.is_player = false
-
+	# Obtener los mandos conectados.
 	var pads: Array[int] = Input.get_connected_joypads()
-	var pad: int = pads[0] if not pads.is_empty() else -1
-	player.usar_teclado = not solo_mando
-	player.mando_id = -1 if multijugador_local else pad
-	enemy.usar_teclado = false
-	enemy.mando_id = pad if multijugador_local else -1
-	enemy.is_player = multijugador_local
-	if multijugador_local:
-		player.boxer_name = "J1 - " + selected_character_name
-		enemy.boxer_name = "J2 - " + enemy_name
 
+	# Configurar al Jugador 1.
+	player.is_player = true
+	player.boxer_name = selected_character_name
+
+	# Configurar al rival o Jugador 2.
+	enemy.boxer_name = enemy_name
+
+	if multijugador_local:
+		# MULTIJUGADOR LOCAL.
+		player.boxer_name = "J1 - " + selected_character_name
+		enemy.boxer_name = "J2 - " + selected_player2_name
+
+		# J1 usa el primer mando o el teclado.
+		if pads.size() >= 1:
+			player.mando_id = pads[0]
+			player.usar_teclado = false
+		else:
+			player.mando_id = -1
+			player.usar_teclado = true
+
+		# J2 usa el segundo mando o el teclado.
+		if pads.size() >= 2:
+			enemy.mando_id = pads[1]
+			enemy.usar_teclado = false
+		else:
+			enemy.mando_id = -1
+			enemy.usar_teclado = true
+
+		# Ambos boxeadores son jugadores.
+		enemy.is_player = true
+
+	else:
+		# MODO INDIVIDUAL.
+
+		# J1 usa el primer mando si existe;
+		# de lo contrario, usa el teclado.
+		if not pads.is_empty():
+			player.mando_id = pads[0]
+			player.usar_teclado = false
+		else:
+			player.mando_id = -1
+			player.usar_teclado = true
+
+		# El rival será controlado por la IA.
+		enemy.mando_id = -1
+		enemy.usar_teclado = false
+		enemy.is_player = false
+
+	# Posiciones iniciales.
 	player.position = Vector2(-100, 0)
 	enemy.position = Vector2(100, 0)
 
+	# Vincular a los oponentes.
 	player.opponent = enemy
 	enemy.opponent = player
 
+	# Añadir los boxeadores al ring.
 	ring.add_child(player)
 	ring.add_child(enemy)
 
+	# Conectar las señales de estadísticas y KO.
 	player.stats_changed.connect(_on_stats_changed)
 	enemy.stats_changed.connect(_on_stats_changed)
 
@@ -1056,6 +1176,8 @@ func _start_next_round() -> void:
 	_start_round()
 
 
+
+
 func _finish_fight(player_won: bool, is_draw: bool = false) -> void:
 	if fight_finished:
 		return
@@ -1067,6 +1189,7 @@ func _finish_fight(player_won: bool, is_draw: bool = false) -> void:
 	break_timer = 0.0
 	announcement_id += 1
 
+	# Resultado del multijugador local.
 	if multijugador_local:
 		if is_draw:
 			_show_final_result("EMPATE")
@@ -1076,8 +1199,8 @@ func _finish_fight(player_won: bool, is_draw: bool = false) -> void:
 			_show_final_result("GANA JUGADOR 2")
 		return
 
-	# Si ganaste contra Mamen, avanzar a Chicho.
-	if player_won and campaign_fight_index == 0:
+	# Avanzar al siguiente rival si ganamos la pelea.
+	if player_won and campaign_fight_index < CAMPAIGN_SCENES.size() - 1:
 		progress["wins"] = int(progress.get("wins", 0)) + 1
 		save_progress()
 
@@ -1096,15 +1219,17 @@ func _finish_fight(player_won: bool, is_draw: bool = false) -> void:
 		if is_instance_valid(save_button):
 			save_button.visible = false
 
-		SoundManager.set_crowd_enabled(false)
-		SoundManager.play_sfx("victory", -0.5, 0.0)
+		# SoundManager.set_crowd_enabled(false)
+		# SoundManager.play_sfx("victory", -0.5, 0.0)
 
 		await get_tree().create_timer(2.5).timeout
 
 		if not is_inside_tree():
 			return
 
-		campaign_fight_index = 1
+		# Pasar al siguiente rival de la campaña.
+		campaign_fight_index += 1
+
 		current_round = 1
 		player_round_wins = 0
 		enemy_round_wins = 0
@@ -1112,20 +1237,31 @@ func _finish_fight(player_won: bool, is_draw: bool = false) -> void:
 
 		fight_finished = false
 
+		# Elegir un escenario distinto al de la pelea anterior.
+		_elegir_escenario_aleatorio()
+
 		if not _spawn_boxers():
+			fight_finished = true
 			return
 
-		SoundManager.set_crowd_enabled(true)
-		SoundManager.play_sfx("round_bell", -1.0, 0.0)
+		# SoundManager.set_crowd_enabled(true)
+		# SoundManager.play_sfx("round_bell", -1.0, 0.0)
 
 		_start_round()
-		_show_announcement("A NEW CHALLENGER APPROACHES!\nCHICHO MEDINA", 2.0)
+
+		var next_opponent_name: String = CAMPAIGN_NAMES[campaign_fight_index]
+		_show_announcement(
+			"A NEW CHALLENGER APPROACHES!\n" + next_opponent_name.to_upper(),
+			2.0
+		)
 		return
 
-	# Resultado definitivo: segunda pelea o derrota.
+	# Resultado definitivo: derrota, empate o victoria final.
 	if player_won:
 		progress["wins"] = int(progress.get("wins", 0)) + 1
-		_show_final_result("CAMPAIGN COMPLETE!\nYOU DEFEATED CHICHO MEDINA")
+		_show_final_result(
+			"CAMPAIGN COMPLETE!\nYOU DEFEATED CHICHO MEDINA"
+		)
 	elif is_draw:
 		_show_final_result("DRAW!")
 	else:
@@ -1133,6 +1269,8 @@ func _finish_fight(player_won: bool, is_draw: bool = false) -> void:
 		_show_final_result("DEFEAT")
 
 	save_progress()
+
+
 
 
 func _show_final_result(message: String) -> void:
@@ -1346,6 +1484,7 @@ func load_progress() -> void:
 		saved_progress = progress.duplicate(true)
 
 
+
 func _resume_saved_progress() -> void:
 	if not _read_saved_match():
 		_show_message("NO HAY UNA PARTIDA GUARDADA VÁLIDA")
@@ -1370,10 +1509,11 @@ func _resume_saved_progress() -> void:
 		saved_match["character_name"]
 	)
 
+	# Permitir cargar cualquiera de las cinco peleas.
 	campaign_fight_index = clampi(
 		int(saved_match["campaign_fight_index"]),
 		0,
-		1
+		CAMPAIGN_SCENES.size() - 1
 	)
 
 	ring.process_mode = Node.PROCESS_MODE_INHERIT
@@ -1412,6 +1552,7 @@ func _resume_saved_progress() -> void:
 	_update_timer_label()
 
 	_show_announcement("PARTIDA CARGADA", 1.2)
+
 # --------------------------------------------------
 # EXIT
 # --------------------------------------------------
@@ -1419,18 +1560,31 @@ func _resume_saved_progress() -> void:
 func _exit_game() -> void:
 	get_tree().quit()
 
+
 func _check_controller() -> bool:
+	# Obtener los mandos conectados.
 	var pads: Array[int] = Input.get_connected_joypads()
-	var target: BoxerBase = enemy if multijugador_local else player
-	if not is_instance_valid(target):
-		return true
-	if not pads.has(target.mando_id):
-		target.mando_id = pads[0] if not pads.is_empty() else -1
-	var missing: bool = (multijugador_local or solo_mando) and target.mando_id < 0
-	ring.process_mode = Node.PROCESS_MODE_DISABLED if missing else Node.PROCESS_MODE_INHERIT
-	if missing and is_instance_valid(timer_label):
-		timer_label.text = "CONECTA MANDO"
-	return not missing
+
+	# Revisar al jugador 1.
+	if is_instance_valid(player):
+		if player.mando_id >= 0 and not pads.has(player.mando_id):
+			# Si se desconecta su mando, pasa a usar teclado.
+			player.mando_id = -1
+			player.usar_teclado = true
+
+	# Revisar al jugador 2 en multijugador local.
+	if multijugador_local and is_instance_valid(enemy):
+		if enemy.mando_id >= 0 and not pads.has(enemy.mando_id):
+			# Si se desconecta su mando, pasa a usar teclado.
+			enemy.mando_id = -1
+			enemy.usar_teclado = true
+
+	# No bloquear la pelea por falta de mandos.
+	if is_instance_valid(ring):
+		ring.process_mode = Node.PROCESS_MODE_INHERIT
+
+	return true
+
 
 #guardado de datos de los personajes 
 func _get_fighter_snapshot(boxer: BoxerBase) -> Dictionary:
@@ -1550,12 +1704,19 @@ func _read_saved_match() -> bool:
 		if not data.has(key):
 			return false
 
-	if str(data["character_scene"]) not in [
-		MAMEN_SCENE,
-		CHICHO_SCENE
-	]:
+	# Verificar que el personaje guardado esté entre los cinco disponibles.
+	var saved_character_scene := str(data["character_scene"])
+	var valid_character := false
+
+	for character in AVAILABLE_CHARACTERS:
+		if saved_character_scene == str(character["scene"]):
+			valid_character = true
+			break
+
+	if not valid_character:
 		return false
 
+	# Validar los datos de ambos boxeadores.
 	for fighter_key in ["player", "enemy"]:
 		var fighter: Variant = data[fighter_key]
 
@@ -1563,8 +1724,13 @@ func _read_saved_match() -> bool:
 			return false
 
 		for key in [
-			"health", "stamina", "position", "velocity",
-			"regen_wait", "hit_stun_time", "knockback_velocity"
+			"health",
+			"stamina",
+			"position",
+			"velocity",
+			"regen_wait",
+			"hit_stun_time",
+			"knockback_velocity"
 		]:
 			if not fighter.has(key):
 				return false
@@ -1688,13 +1854,14 @@ func _aplicar_escenario(ruta: String) -> void:
 	fondo.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	fondo.z_index = -10
 
-	# Ajustar el fondo al escenario.
+	# Ajustar el tamaño y la posición de cada escenario.
+# Ajustar el tamaño y la posición de cada escenario.
 	if ruta == "res://assets/escenarios/escenario_banderas.ogv":
 		fondo.size = Vector2(1584, 891)
-	else:
-		fondo.size = Vector2(1584, 672)
+		fondo.position = Vector2(-792, -510.5)
 
-	fondo.position = -fondo.size / 2.0
+
+
 	fondo.show()
 	fondo.play()
 
