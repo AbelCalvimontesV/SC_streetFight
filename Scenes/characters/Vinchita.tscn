@@ -1,0 +1,623 @@
+[gd_scene format=3 uid="uid://7eo4th0wusxi"]
+
+[ext_resource type="Script" uid="uid://b36nqtuotukv3" path="res://scripts/combat/BoxerBase.gd" id="1_v4r1j"]
+[ext_resource type="Shader" uid="uid://bovrhn6040o46" path="res://assets/chroma_key.gdshader" id="2_tdg67"]
+[ext_resource type="Texture2D" uid="uid://dfm0meufvaxae" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Bloqueos/Parado/bloqueos [85D7857].png" id="3_ttaa7"]
+[ext_resource type="Texture2D" uid="uid://bcfwq1pt0dgp6" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Bloqueos/Parado/bloqueos [754B8EB].png" id="4_7q1q5"]
+[ext_resource type="Texture2D" uid="uid://bdxlbx2jmb1j" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Bloqueos/Parado/bloqueos [27679C2].png" id="5_whfvo"]
+[ext_resource type="Texture2D" uid="uid://broqxfd6qq7mb" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Bloqueos/Al agacharse/bloqueos [3FF50A6].png" id="6_1dvug"]
+[ext_resource type="Texture2D" uid="uid://0jmulbdfggp8" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Bloqueos/Al agacharse/bloqueos [68C0E67].png" id="7_nq08e"]
+[ext_resource type="Texture2D" uid="uid://o7qm8ur2wxwg" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Bloqueos/Al agacharse/bloqueos [D40206B].png" id="8_f5v8g"]
+[ext_resource type="Texture2D" uid="uid://jyhx888wav7v" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Recibiendo golpes/Al agacharse/golpe recibido agachado [736B34C].png" id="9_5i5oe"]
+[ext_resource type="Texture2D" uid="uid://dhbrjmxtplhdp" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Recibiendo golpes/Al agacharse/golpe recibido agachado [91070E3].png" id="10_xlg6i"]
+[ext_resource type="Texture2D" uid="uid://cqx21l3qqh63h" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Recibiendo golpes/Al agacharse/golpe recibido agachado [BD9FC6C].png" id="11_5j2h6"]
+[ext_resource type="Texture2D" uid="uid://dd11vrrkjb6pm" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Golpes/Agachado/golpe agachado [40FD883].png" id="12_2y63v"]
+[ext_resource type="Texture2D" uid="uid://cl1gms82ntn7l" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Golpes/Agachado/golpe agachado [5E217D7].png" id="13_x851t"]
+[ext_resource type="Texture2D" uid="uid://l78b6idt45q1" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Golpes/Agachado/golpe agachado [0AA63F8].png" id="14_7jg16"]
+[ext_resource type="Texture2D" uid="uid://b7tniw7v6tfo6" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Golpes/Agachado/golpe agachado [66EC51F].png" id="15_orgdl"]
+[ext_resource type="Texture2D" uid="uid://beqb8gy1w1g84" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Golpes/Agachado/golpe agachado [4AB1110].png" id="16_ka34f"]
+[ext_resource type="Texture2D" uid="uid://cgrft60vpgqdl" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Noqueos/Noqueo normal/golpe recibido noqueado [9A12AD8].png" id="17_c3eqx"]
+[ext_resource type="Texture2D" uid="uid://dy5q6s416ijcw" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Noqueos/Noqueo normal/golpe recibido noqueado [25E8273].png" id="18_tgcxi"]
+[ext_resource type="Texture2D" uid="uid://dypbqtajsku1v" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Noqueos/Noqueo normal/golpe recibido noqueado [76EC31D].png" id="19_2swvn"]
+[ext_resource type="Texture2D" uid="uid://dg0i68oya0i87" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Noqueos/Noqueo normal/golpe recibido noqueado [2391FBA].png" id="20_ulpjv"]
+[ext_resource type="Texture2D" uid="uid://d3npnqhpnusk1" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Noqueos/Noqueo normal/golpe recibido noqueado [8201F7A].png" id="21_k4cgr"]
+[ext_resource type="Texture2D" uid="uid://b12woc67hapc4" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Caminando agachado/caminar agachado [0D85A67].png" id="22_4tgpp"]
+[ext_resource type="Texture2D" uid="uid://dkijebkrqjjj8" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Caminando agachado/caminar agachado [0E6687D].png" id="23_quqby"]
+[ext_resource type="Texture2D" uid="uid://iob0twfjc5eq" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Caminando agachado/caminar agachado [59A0033].png" id="24_kmec5"]
+[ext_resource type="Texture2D" uid="uid://bap8bcsnngrjt" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Caminando agachado/caminar agachado [696D247].png" id="25_7ll87"]
+[ext_resource type="Texture2D" uid="uid://b0nmw756dp8u6" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Caminando agachado/caminar agachado [AE9A1CF].png" id="26_os2wt"]
+[ext_resource type="Texture2D" uid="uid://c0wmt7rsq03vq" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Caminando agachado/caminar agachado [B17A28D].png" id="27_7hpfh"]
+[ext_resource type="Texture2D" uid="uid://dbl383nge20s" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Golpes/Parado/golpe simpe [2A3184F].png" id="28_b0ybo"]
+[ext_resource type="Texture2D" uid="uid://vg4p21wm3e3x" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Golpes/Parado/golpe simpe [6C80B39].png" id="29_yct5m"]
+[ext_resource type="Texture2D" uid="uid://c387g7n01ktt3" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Golpes/Parado/golpe simpe [9FFE99F].png" id="30_u0c4v"]
+[ext_resource type="Texture2D" uid="uid://cnfqacapinw6e" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Golpes/Parado/golpe simpe [124046B].png" id="31_rii5r"]
+[ext_resource type="Texture2D" uid="uid://dhekjiarcbw4o" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Golpes/Parado/golpe simpe [651044F].png" id="32_gf40u"]
+[ext_resource type="Texture2D" uid="uid://n4oee2amlx4p" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Recibiendo golpes/Parado/golpe revibido [1D512B4].png" id="33_v2fnk"]
+[ext_resource type="Texture2D" uid="uid://cjvuj2pm8k06g" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Recibiendo golpes/Parado/golpe revibido [4FA250A].png" id="34_fq4gc"]
+[ext_resource type="Texture2D" uid="uid://7n73fi27v1n" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Recibiendo golpes/Parado/golpe revibido [B0AFBBD].png" id="35_h0w4t"]
+[ext_resource type="Texture2D" uid="uid://osji8d0h4v6e" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Recibiendo golpes/Parado/golpe revibido [EDEA463].png" id="36_qctbf"]
+[ext_resource type="Texture2D" uid="uid://tnlcpr8nu40q" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Idle/idle [6DCC447].png" id="37_bwf3l"]
+[ext_resource type="Texture2D" uid="uid://ds76onmqdqgqp" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Idle/idle [8A682C8].png" id="38_1vrhm"]
+[ext_resource type="Texture2D" uid="uid://cmgn1huax5cgn" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Idle/idle [8C5107C].png" id="39_7b00e"]
+[ext_resource type="Texture2D" uid="uid://b3j330etlgc5r" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Idle/idle [B1A38B0].png" id="40_v4r1j"]
+[ext_resource type="Texture2D" uid="uid://db8c75gfkkr2k" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Idle/idle [B7F027C].png" id="41_tdg67"]
+[ext_resource type="Texture2D" uid="uid://vl15g13uusar" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Idle/idle [F9E8F38].png" id="42_k2wpt"]
+[ext_resource type="Texture2D" uid="uid://clhyr88w14a1u" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Saltando/saltando [5C9801B].png" id="43_ckvqn"]
+[ext_resource type="Texture2D" uid="uid://oslq05ianjfl" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Saltando/saltando [2922F90].png" id="44_jknk5"]
+[ext_resource type="Texture2D" uid="uid://yrwfyrqkgssi" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Saltando/saltando [B2C9615].png" id="45_nnt01"]
+[ext_resource type="Texture2D" uid="uid://eypuaeisqmi8" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Saltando/saltando [CDB8A14].png" id="46_atf8e"]
+[ext_resource type="Texture2D" uid="uid://qrkmd8b7liyj" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Saltando/saltando [F0FF47B].png" id="47_nuxdg"]
+[ext_resource type="Texture2D" uid="uid://bdvrrun5ip5pj" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Bloqueos/Al saltar/bloqueos [46EEF2C].png" id="48_pwgil"]
+[ext_resource type="Texture2D" uid="uid://d0odej7nc84w6" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Bloqueos/Al saltar/bloqueos [BDE5F7F].png" id="49_edvhb"]
+[ext_resource type="Texture2D" uid="uid://ckxxrrj4cy0mr" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Bloqueos/Al saltar/bloqueos [EEA045B].png" id="50_x3b4m"]
+[ext_resource type="Texture2D" uid="uid://bp8n4ny5dfbwx" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Recibiendo golpes/Al saltar/golpe recibido arriba [C7C5FFD].png" id="51_l5urq"]
+[ext_resource type="Texture2D" uid="uid://byyx61rkor3v1" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Recibiendo golpes/Al saltar/golpe recibido arriba [A0440F1].png" id="52_mwc6i"]
+[ext_resource type="Texture2D" uid="uid://c0qnjsvq7s1ge" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Recibiendo golpes/Al saltar/golpe recibido arriba [2F42739].png" id="53_1el36"]
+[ext_resource type="Texture2D" uid="uid://bo21liqvgbhbl" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Recibiendo golpes/Al saltar/golpe recibido arriba [34856EB].png" id="54_lrkbj"]
+[ext_resource type="Texture2D" uid="uid://b3e8v86rfgk6t" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Recibiendo golpes/Al saltar/golpe recibido arriba [EC3D4E5].png" id="55_2rs6y"]
+[ext_resource type="Texture2D" uid="uid://dqiddrf1evg5f" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Golpes/Saltando/golpe saltando [27F528D].png" id="56_1jd3i"]
+[ext_resource type="Texture2D" uid="uid://bnyl3s8s8e23n" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Golpes/Saltando/golpe saltando [319CCFD].png" id="57_2u518"]
+[ext_resource type="Texture2D" uid="uid://dhi7kw7terjbi" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Golpes/Saltando/golpe saltando [4163B58].png" id="58_ujno1"]
+[ext_resource type="Texture2D" uid="uid://dqs415bi6gtfa" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Golpes/Saltando/golpe saltando [B84FFA1].png" id="59_5kt0j"]
+[ext_resource type="Texture2D" uid="uid://ouw3rrrta43m" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Noqueos/Noqueo arriba/golpe recibido arriba [C7C5FFD].png" id="60_eqq1u"]
+[ext_resource type="Texture2D" uid="uid://x2b3n5dgi0kf" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Noqueos/Noqueo arriba/golpe recibido arriba [A0440F1].png" id="61_cgh1n"]
+[ext_resource type="Texture2D" uid="uid://byem0xymhkf54" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Noqueos/Noqueo arriba/golpe recibido arriba [34856EB].png" id="62_varec"]
+[ext_resource type="Texture2D" uid="uid://do0q04tqkr20y" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Noqueos/Noqueo arriba/golpe recibido arriba [207180E].png" id="63_euqj5"]
+[ext_resource type="Texture2D" uid="uid://8qbkergphvwt" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Noqueos/Noqueo arriba/golpe recibido arriba [B790892].png" id="64_ypsyl"]
+[ext_resource type="Texture2D" uid="uid://c77cxs7cso7d2" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Poder/Nuevo proyecto 67 [1DD3E23].png" id="65_n64xa"]
+[ext_resource type="Texture2D" uid="uid://h22tilt5bw7y" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Poder/Nuevo proyecto 67 [AB151A7].png" id="66_gcyeq"]
+[ext_resource type="Texture2D" uid="uid://cn8ui0xu5ynvr" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Poder/Nuevo proyecto 67 [4F9124D].png" id="67_hunw4"]
+[ext_resource type="Texture2D" uid="uid://b5r6qgvo03g6l" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Poder/Nuevo proyecto 67 [4C8E369].png" id="68_1rpiq"]
+[ext_resource type="Texture2D" uid="uid://dhk80r8x7h60w" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Poder/Nuevo proyecto 67 [5547D7E].png" id="69_jnbq7"]
+[ext_resource type="Texture2D" uid="uid://b106wdsrsxnis" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Poder/Nuevo proyecto 67 [D951A4F].png" id="70_a2mp8"]
+[ext_resource type="Texture2D" uid="uid://bw58lrd3r51as" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Poder/Nuevo proyecto 67 [EAC5327].png" id="71_5keld"]
+[ext_resource type="Texture2D" uid="uid://b2uqjtbcqt61x" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Caminando/caminando [25CE4B0].png" id="72_ykdid"]
+[ext_resource type="Texture2D" uid="uid://dmqont5rmpkfp" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Caminando/caminando [93E6982].png" id="73_nni5l"]
+[ext_resource type="Texture2D" uid="uid://bbc12qbtmon2l" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Caminando/caminando [1166D75].png" id="74_u5vio"]
+[ext_resource type="Texture2D" uid="uid://ca2jsok7eqfff" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Caminando/caminando [1101673].png" id="75_yfan2"]
+[ext_resource type="Texture2D" uid="uid://daqqoustw1g07" path="res://assets/Sprites-protecto/Sprites/Sprites-vinchita/Caminando/caminando [C522455].png" id="76_767tf"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_10eym"]
+shader = ExtResource("2_tdg67")
+shader_parameter/key_color = Color(0, 1, 0, 1)
+shader_parameter/threshold = 0.46400002204
+shader_parameter/softness = 0.510000024225
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8w0r3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_ttaa7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_7q1q5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_whfvo")
+}],
+"loop": 1,
+"name": &"block",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_1dvug")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_nq08e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_f5v8g")
+}],
+"loop": 1,
+"name": &"crouch_block",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_5i5oe")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_xlg6i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_5j2h6")
+}],
+"loop": 1,
+"name": &"crouch_hit",
+"speed": 11.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("12_2y63v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_x851t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_7jg16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_orgdl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_ka34f")
+}],
+"loop": 1,
+"name": &"crouch_jab",
+"speed": 11.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("17_c3eqx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_tgcxi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_2swvn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_ulpjv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_k4cgr")
+}],
+"loop": 1,
+"name": &"crouch_ko",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("22_4tgpp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_quqby")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_kmec5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_7ll87")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_os2wt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_7hpfh")
+}],
+"loop": 1,
+"name": &"crouch_walk",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("27_7hpfh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_quqby")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_7ll87")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_kmec5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_4tgpp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_os2wt")
+}],
+"loop": 1,
+"name": &"crouch_walk_backwards",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("28_b0ybo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_yct5m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_u0c4v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_rii5r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_gf40u")
+}],
+"loop": 1,
+"name": &"heavy_attack",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("33_v2fnk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_fq4gc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_h0w4t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_qctbf")
+}],
+"loop": 1,
+"name": &"hit",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("37_bwf3l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_1vrhm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_7b00e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_v4r1j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_tdg67")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_k2wpt")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("28_b0ybo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_yct5m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_u0c4v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_rii5r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_gf40u")
+}],
+"loop": 1,
+"name": &"jab",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("43_ckvqn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_jknk5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_nnt01")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_atf8e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("47_nuxdg")
+}],
+"loop": 1,
+"name": &"jump",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("48_pwgil")
+}, {
+"duration": 1.0,
+"texture": ExtResource("49_edvhb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50_x3b4m")
+}],
+"loop": 1,
+"name": &"jump_block",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("51_l5urq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("52_mwc6i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("53_1el36")
+}, {
+"duration": 1.0,
+"texture": ExtResource("54_lrkbj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("55_2rs6y")
+}],
+"loop": 1,
+"name": &"jump_hit",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("56_1jd3i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("57_2u518")
+}, {
+"duration": 1.0,
+"texture": ExtResource("58_ujno1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("59_5kt0j")
+}],
+"loop": 1,
+"name": &"jump_jab",
+"speed": 11.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("60_eqq1u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("61_cgh1n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("62_varec")
+}, {
+"duration": 1.0,
+"texture": ExtResource("63_euqj5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("64_ypsyl")
+}],
+"loop": 1,
+"name": &"jump_ko",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("28_b0ybo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_yct5m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_u0c4v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_rii5r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_gf40u")
+}],
+"loop": 1,
+"name": &"kick",
+"speed": 11.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("17_c3eqx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_tgcxi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_2swvn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_ulpjv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_k4cgr")
+}],
+"loop": 1,
+"name": &"ko",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("65_n64xa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("66_gcyeq")
+}, {
+"duration": 1.1,
+"texture": ExtResource("67_hunw4")
+}, {
+"duration": 1.5,
+"texture": ExtResource("68_1rpiq")
+}, {
+"duration": 3.0,
+"texture": ExtResource("69_jnbq7")
+}, {
+"duration": 1.3,
+"texture": ExtResource("70_a2mp8")
+}, {
+"duration": 1.3,
+"texture": ExtResource("71_5keld")
+}, {
+"duration": 1.0,
+"texture": ExtResource("66_gcyeq")
+}],
+"loop": 1,
+"name": &"special",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("72_ykdid")
+}, {
+"duration": 1.0,
+"texture": ExtResource("73_nni5l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("74_u5vio")
+}, {
+"duration": 1.0,
+"texture": ExtResource("75_yfan2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("76_767tf")
+}],
+"loop": 1,
+"name": &"walk",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("76_767tf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("73_nni5l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("74_u5vio")
+}, {
+"duration": 1.0,
+"texture": ExtResource("72_ykdid")
+}, {
+"duration": 1.0,
+"texture": ExtResource("75_yfan2")
+}],
+"loop": 1,
+"name": &"walk_backwards",
+"speed": 11.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_jtvhe"]
+radius = 32.0
+height = 288.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4e15o"]
+size = Vector2(105.75, 17.75)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ydnqi"]
+size = Vector2(101.1875, 271.6875)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cd40g"]
+size = Vector2(41.5, 87.25)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_81kn5"]
+size = Vector2(122.6875, 21.375023)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qlbmr"]
+size = Vector2(129.53127, 46.50002)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vq3yq"]
+size = Vector2(84.00002, 36.249992)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_54w7f"]
+size = Vector2(128.75006, 53.624992)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4ixkp"]
+size = Vector2(118.25003, 251.56253)
+
+[node name="Vinchita" type="CharacterBody2D" unique_id=285974772]
+scale = Vector2(0.8, 0.8)
+script = ExtResource("1_v4r1j")
+boxer_name = "Vinchita"
+move_speed = 205.0
+jump_velocity = -900.0
+gravity = 1700.0
+jab_damage = 7.0
+crouch_jab_damage = 7.0
+heavy_attack_damage = 18.0
+jump_jab_damage = 7.0
+kick_damage = 14.0
+special_damage = 32.0
+ai_aggression = 90.0
+ai_defense = 20.0
+ai_special_chance = 45.0
+ai_attack_variety = 80.0
+ai_preferred_distance = 70.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=838597607]
+material = SubResource("ShaderMaterial_10eym")
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_8w0r3")
+animation = &"walk_backwards"
+frame_progress = 0.5740991
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=600227280]
+position = Vector2(-13, 104)
+shape = SubResource("CapsuleShape2D_jtvhe")
+debug_color = Color(0.77916163, 0.43839118, 3.85046e-07, 0.41960785)
+
+[node name="HitboxJab" type="Area2D" parent="." unique_id=189311898]
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxJab" unique_id=989241651]
+position = Vector2(145, 11.25)
+scale = Vector2(0.99999994, 0.99999994)
+shape = SubResource("RectangleShape2D_4e15o")
+debug_color = Color(0.9946893, 0, 0.2254506, 0.41960785)
+
+[node name="Hurtbox" type="Area2D" parent="." unique_id=2123280638 groups=["hurtboxes"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=141552562]
+position = Vector2(-23.093746, 92.90625)
+scale = Vector2(0.99999994, 0.99999994)
+shape = SubResource("RectangleShape2D_ydnqi")
+
+[node name="PushBox" type="Area2D" parent="." unique_id=775979032]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PushBox" unique_id=1097173345]
+position = Vector2(-8, 49)
+shape = SubResource("RectangleShape2D_cd40g")
+debug_color = Color(0.47743213, 0.44774497, 0.9790428, 0.41960785)
+
+[node name="HitboxCrouchJab" type="Area2D" parent="." unique_id=637032904]
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxCrouchJab" unique_id=1567170554]
+position = Vector2(154.90619, 110.56248)
+scale = Vector2(0.99999976, 0.99999976)
+shape = SubResource("RectangleShape2D_81kn5")
+debug_color = Color(0.9946893, 0, 0.2254506, 0.41960785)
+
+[node name="HitboxHeavyAttack" type="Area2D" parent="." unique_id=2057258110]
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxHeavyAttack" unique_id=1109998240]
+position = Vector2(383.75, 26.25)
+scale = Vector2(0.9999997, 0.9999997)
+shape = SubResource("RectangleShape2D_qlbmr")
+debug_color = Color(0.9946893, 0, 0.2254506, 0.41960785)
+
+[node name="HitboxJumpJab" type="Area2D" parent="." unique_id=682954368]
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxJumpJab" unique_id=1315308385]
+position = Vector2(151.25, 21.25)
+scale = Vector2(0.9999997, 0.9999997)
+shape = SubResource("RectangleShape2D_vq3yq")
+debug_color = Color(0.9946893, 0, 0.2254506, 0.41960785)
+
+[node name="HitboxKick" type="Area2D" parent="." unique_id=522513957]
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxKick" unique_id=227124146]
+position = Vector2(126.25, 22.5)
+scale = Vector2(0.99999964, 0.99999964)
+shape = SubResource("RectangleShape2D_54w7f")
+debug_color = Color(0.9946893, 0, 0.2254506, 0.41960785)
+
+[node name="HitboxSpecial" type="Area2D" parent="." unique_id=302116278]
+visible = false
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxSpecial" unique_id=741036381]
+position = Vector2(40, -37.499996)
+scale = Vector2(0.99999976, 0.99999976)
+shape = SubResource("RectangleShape2D_4ixkp")
+debug_color = Color(0.9946893, 0, 0.2254506, 0.41960785)
